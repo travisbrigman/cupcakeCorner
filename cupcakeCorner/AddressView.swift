@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AddressView: View {
-    @ObservedObject var orders = Orders()
+    @ObservedObject var orders: Orders
     
     var body: some View {
         Form {

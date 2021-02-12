@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    //declration of oberseved object in this View. Notice its just a reference, not an instantiation of new object.
     @ObservedObject var orders: Orders
     
     var body: some View {
