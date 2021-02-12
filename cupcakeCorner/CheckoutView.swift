@@ -10,6 +10,9 @@ import SwiftUI
 
 struct CheckoutView: View {
     @ObservedObject var order: Order
+    
+    @State private var confirmationMessage = ""
+    @State private var showingConfirmation = false
     var body: some View {
         GeometryReader { geo in
             ScrollView {
@@ -29,6 +32,9 @@ struct CheckoutView: View {
             }
         }
         .navigationBarTitle("Checkout", displayMode: .inline)
+        .alert(isPresented: $showingConfirmation) {
+            Alert(title: Text("Thank You"), message: Text(confirmationMessage), dismissButton: .default(Text("OK")))
+        }
     }
     func placeOrder()  {
         guard let encoded =  try? JSONEncoder().encode(order) else {
@@ -42,8 +48,17 @@ struct CheckoutView: View {
         request.httpBody = encoded
         
         URLSession.shared.dataTask(with: request) {
-            data, response, err in
-            
+            data, response, error in
+            guard let data = data else {
+                print("No Data In Response: \(error?.localizedDescription ?? "Unknown Error").")
+                return
+            }
+            if let decodedOrder = try? JSONDecoder().decode(Order.self, from: data) {
+                self.confirmationMessage = "Your Order For \(decodedOrder.quantity) x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
+                self.showingConfirmation = true
+            } else {
+                print("invalid response from server")
+            }
         }.resume()
     }
 }
