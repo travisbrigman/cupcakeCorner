@@ -9,40 +9,40 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var order = Order()
+    @ObservedObject var orders: Orders
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    Picker("Select your Cake Type", selection: $order.type) {
+                    Picker("Select your Cake Type", selection: $orders.order.type) {
                         ForEach(0..<Order.types.count, id: \.self ){
                             Text(Order.types[$0])
                         }
                     }
                     
-                    Stepper(value: $order.quantity, in: 3...20) {
-                        Text("Number of Cakes: \(order.quantity)")
+                    Stepper(value: $orders.order.quantity, in: 3...20) {
+                        Text("Number of Cakes: \(orders.order.quantity)")
                     }
                 }
                 
                 Section {
-                    Toggle(isOn: $order.specialRequestEnabled.animation()) {
+                    Toggle(isOn: $orders.order.specialRequestEnabled.animation()) {
                         Text("Any Special Requests?")
                     }
                     
-                    if order.specialRequestEnabled {
-                        Toggle(isOn: $order.extraFrosting) {
+                    if orders.order.specialRequestEnabled {
+                        Toggle(isOn: $orders.order.extraFrosting) {
                             Text("Add Extra Frosting")
                         }
-                        Toggle(isOn: $order.extraSprinkles) {
+                        Toggle(isOn: $orders.order.extraSprinkles) {
                             Text("Add Extra Sprinkles")
                         }
                     }
                 }
                 
                 Section {
-                    NavigationLink(destination: AddressView(order: order)) {
+                    NavigationLink(destination: AddressView(orders: orders)) {
                         Text("Delivery Details")
                     }
                 }
@@ -54,6 +54,6 @@ struct ContentView: View {
 }
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(orders: Orders())
     }
 }

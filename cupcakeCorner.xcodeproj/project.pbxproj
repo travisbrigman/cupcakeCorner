@@ -68,12 +68,10 @@
 		0F0FFE1525D57DA300FB3E26 /* cupcakeCorner */ = {
 			isa = PBXGroup;
 			children = (
-				0F0FFE2A25D5814D00FB3E26 /* ExampleClass.swift */,
+				0FB70FD125D69CBB00AF79B9 /* ExampleFiles */,
 				0F0FFE1625D57DA300FB3E26 /* AppDelegate.swift */,
 				0F0FFE1825D57DA300FB3E26 /* SceneDelegate.swift */,
 				0F0FFE1A25D57DA300FB3E26 /* ContentView.swift */,
-				0F0FFE2C25D58F9C00FB3E26 /* URLandCodableExample.swift */,
-				0F0FFE2E25D5935600FB3E26 /* FieldValidationExample.swift */,
 				0F0FFE3025D593EA00FB3E26 /* Order.swift */,
 				0F0FFE3225D59B1600FB3E26 /* AddressView.swift */,
 				0F0FFE3425D59E7F00FB3E26 /* CheckoutView.swift */,
@@ -91,6 +89,16 @@
 				0F0FFE1F25D57DA800FB3E26 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0FB70FD125D69CBB00AF79B9 /* ExampleFiles */ = {
+			isa = PBXGroup;
+			children = (
+				0F0FFE2A25D5814D00FB3E26 /* ExampleClass.swift */,
+				0F0FFE2C25D58F9C00FB3E26 /* URLandCodableExample.swift */,
+				0F0FFE2E25D5935600FB3E26 /* FieldValidationExample.swift */,
+			);
+			path = ExampleFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

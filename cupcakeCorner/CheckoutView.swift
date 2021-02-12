@@ -9,12 +9,13 @@
 import SwiftUI
 
 struct CheckoutView: View {
-    @ObservedObject var order: Order
+    @ObservedObject var orders: Orders
     
-    @State private var confirmationMessage = ""
-    @State private var showingConfirmation = false
-    @State private var errorMessage = ""
-    @State private var showingError = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var showingAlert = false
+
+
     var body: some View {
         GeometryReader { geo in
             ScrollView {
@@ -23,7 +24,7 @@ struct CheckoutView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: geo.size.width)
-                    Text("Your Total Is: $\(self.order.cost, specifier: "%.2f")")
+                    Text("Your Total Is: $\(self.orders.order.cost, specifier: "%.2f")")
                         .font(.title)
                     
                     Button("place order"){
@@ -34,15 +35,13 @@ struct CheckoutView: View {
             }
         }
         .navigationBarTitle("Checkout", displayMode: .inline)
-        .alert(isPresented: $showingConfirmation) {
-            Alert(title: Text("Thank You"), message: Text(confirmationMessage), dismissButton: .default(Text("OK")))
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
         }
-        .alert(isPresented: $showingError) {
-            Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-        }
+
     }
     func placeOrder()  {
-        guard let encoded =  try? JSONEncoder().encode(order) else {
+        guard let encoded =  try? JSONEncoder().encode(orders.order) else {
             print("failed to encode order")
             return
         }
@@ -56,13 +55,16 @@ struct CheckoutView: View {
             data, response, error in
             guard let data = data else {
                 print("No Data In Response: \(error?.localizedDescription ?? "Unknown Error").")
-                self.errorMessage = error?.localizedDescription ?? "Unknown Error"
-                self.showingError = true
+                self.alertTitle = "Error!"
+                self.alertMessage = error?.localizedDescription ?? "Unknown Error"
+                self.showingAlert = true
                 return
             }
             if let decodedOrder = try? JSONDecoder().decode(Order.self, from: data) {
-                self.confirmationMessage = "Your Order For \(decodedOrder.quantity) x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
-                self.showingConfirmation = true
+                self.alertTitle = "🧁 Hooray!! 🧁"
+                self.alertMessage = "Your Order For \(decodedOrder.quantity) x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
+                self.showingAlert = true
+                print("🧁", self.showingAlert)
             } else {
                 print("invalid response from server")
             }
@@ -72,6 +74,6 @@ struct CheckoutView: View {
 
 struct CheckoutView_Previews: PreviewProvider {
     static var previews: some View {
-        CheckoutView(order: Order())
+        CheckoutView(orders: Orders())
     }
 }
